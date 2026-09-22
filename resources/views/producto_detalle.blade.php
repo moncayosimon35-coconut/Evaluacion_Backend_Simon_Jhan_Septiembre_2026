@@ -11,7 +11,7 @@
     <div class="card p-4">
         <h2>{{ $producto->nombre }}</h2>
         <p class="text-muted">Franquicia: {{ $producto->franquicia }} | Categoría: {{ $producto->categoria->nombre }}</p>
-        <p>{{ $producto->descripcion }}</p>
+        <p>{{ $producto->descripcion ?? 'Sin descripción disponible.' }}</p>
 
         @if($producto->tieneDescuento())
             <p class="text-danger"><strong>¡En Promoción! 10% de Descuento aplicado por stock alto.</strong></p>

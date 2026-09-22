@@ -71,10 +71,11 @@ class VentaController extends Controller
         $carrito = session()->get('carrito', []);
 
         if (empty($carrito)) {
-            return redirect()->route('catalogo')->with('error', 'El carrito está vacío');
+            return redirect()->route('factura.mostrar', $venta->id)->with('success', '¡Compra realizada con éxito!');
         }
 
         DB::beginTransaction();
+
 
         try {
             $total = 0;
@@ -111,13 +112,19 @@ class VentaController extends Controller
             }
 
             DB::commit();
-            session()->forget('carrito');
+session()->forget('carrito');
 
-            return redirect()->route('catalogo')->with('success', '¡Compra realizada con éxito! Venta ID: #' . $venta->id);
+return redirect()->route('factura.mostrar', $venta->id)->with('success', '¡Compra realizada con éxito!');
 
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Error al procesar la compra: ' . $e->getMessage());
         }
     }
+public function factura(Venta $venta)
+{
+    $venta->load('detalles.producto.categoria');
+    return view('factura', compact('venta'));
+}
+
 }
